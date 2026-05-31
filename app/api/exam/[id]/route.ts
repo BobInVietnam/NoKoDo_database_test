@@ -73,3 +73,93 @@ export async function GET(
   }
 }
 
+/**
+ * POST /api/exam/[id]
+ * Accepts a Flutter TestSession JSON payload and writes/updates StudentTestStatus.
+ * * Expected JSON Body from Flutter:
+ * {
+ * "testId": 789,
+ * "studentId": "student_mock_01",
+ * "startTime": 1716942000,
+ * "endTime": 1716945600,
+ * "score": 8.5
+ * }
+ */
+export async function POST(
+  request: NextRequest,
+  context: RouteContext
+) {
+  try {
+    const params = await context.params;
+    const pathTestId = parseInt(params.id, 10);
+
+    if (isNaN(pathTestId)) {
+      return NextResponse.json({ error: 'Invalid URL test ID segment.' }, { status: 400 });
+    }
+
+    // 1. Parse the incoming Flutter class payload matching your Dart properties
+    const body = await request.json();
+    const { testId, studentId, startTime, endTime, score } = body;
+
+    // Validation guard checks
+    if (!studentId || testId === undefined || startTime === undefined || endTime === undefined || score === undefined) {
+      return NextResponse.json(
+        { error: 'Missing parameters. Ensure testId, studentId, startTime, endTime, and score are supplied.' },
+        { status: 400 }
+      );
+    }
+
+    // Explicitly enforce that the payload target aligns with the dynamic API path segment
+    if (parseInt(testId, 10) !== pathTestId) {
+      return NextResponse.json(
+        { error: 'Payload testId does not match the requested API URL endpoint path.' },
+        { status: 400 }
+      );
+    }
+
+    // 2. Perform property mapping transformations
+    const dateCreated = parseInt(startTime, 10);
+    const dateFinished = parseInt(endTime, 10);
+    const calculatedDuration = dateFinished - dateCreated; // Duration in seconds
+    const targetResult = parseFloat(score);
+
+    // 3. Collision Resolution by Replacement using the Compound Primary Key
+    // Prisma matches compound keys explicitly using an automatically grouped "fields_combination" lookup object
+    const savedRecord = await prisma.studentTestStatus.upsert({
+      where: {
+        studentid_testid_dateCreated: {
+          studentid: studentId,
+          testid: pathTestId,
+          dateCreated: dateCreated
+        }
+      },
+      // If it exists, overwrite the status details
+      update: {
+        dateFinished: dateFinished,
+        duration: calculatedDuration,
+        result: targetResult
+      },
+      // If it's a new unique timestamp block, perform a clean create operation
+      create: {
+        studentid: studentId,
+        testid: pathTestId,
+        dateCreated: dateCreated,
+        dateFinished: dateFinished,
+        duration: calculatedDuration,
+        result: targetResult
+      }
+    });
+
+    return NextResponse.json(
+      { message: 'Test session recorded cleanly.', data: savedRecord },
+      { status: 201 }
+    );
+
+  } catch (error: any) {
+    console.error('❌ POST TestSession Error:', error);
+    return NextResponse.json(
+      { error: 'Database record processing failed', details: error.message },
+      { status: 500 }
+    );
+  }
+}

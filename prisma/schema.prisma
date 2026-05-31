@@ -88,22 +88,29 @@ model StudentTestStatus {
   dateCreated  Int             @map("date_created")
   dateFinished Int             @map("date_finished")
   duration     Int
-  result       Float           // REAL maps to Float in Prisma
+  result       Float           
   student      Student         @relation(fields: [studentid], references: [uid])
   test         Test            @relation(fields: [testid], references: [id])
   answers      StudentAnswer[]
 
+  // 1. Define the compound primary key here
+  @@id([studentid, testid, dateCreated]) 
   @@map("student_test_status")
 }
 
 model StudentAnswer {
-  sessionid  Int
+  studentid  String          // 2. Added to match the new parent identity
+  testid     Int             // 2. Added to match the new parent identity
+  dateCreated Int             // 2. Added to match the new parent identity
   questionid Int
-  answer     String
-  question   Question          @relation(fields: [questionid], references: [id])
-  session    StudentTestStatus @relation(fields: [sessionid], references: [sessionid])
+  answer     String?
+  question   Question        @relation(fields: [questionid], references: [id])
+  
+  // 3. Update the relation fields and references to map to the composite key
+  session    StudentTestStatus @relation(fields: [studentid, testid, dateCreated], references: [studentid, testid, dateCreated])
 
-  @@id([sessionid, questionid]) // PRIMARY KEY("sessionid", "questionid")
+  // 4. Update your primary key combination for the answers table
+  @@id([studentid, testid, dateCreated, questionid]) 
   @@map("student_answer")
 }
 

@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Teacher {
+  uid       String   @id // Primary Key ("uid")
+  firstname String
+  lastname  String?
+  classes   Class[]
+
+  @@map("teacher")
+}
+
+model Student {
+  uid        String              @id // Primary Key ("uid")
+  firstname  String
+  lastname   String?
+  classid    Int                 @default(1)
+  class      Class               @relation(fields: [classid], references: [id])
+  testStatuses StudentTestStatus[]
+
+  @@map("student")
+}
+
+model Class {
+  id         Int         @id @default(autoincrement()) // PRIMARY KEY ("id")
+  className  String      @map("class name")
+  teacherid  String
+  teacher    Teacher     @relation(fields: [teacherid], references: [uid])
+  students   Student[]
+  classTests ClassTest[]
+  lessons    ClassLesson[]
+
+  @@map("class")
+}
+
+model Lesson {
+  id          Int           @id @default(autoincrement())
+  name        String
+  content     Json          @default("{}")
+  difficulty  Int
+  dateCreated Int           @map("date_created") // Keeping as Int to match your SQLite schema
+  classes     ClassLesson[]
+
+  @@map("lesson")
+}
+
+model Test {
+  id              Int                 @id @default(autoincrement())
+  name            String
+  dateCreated     Int                 @map("date_created")
+  timeLimit       Int                 @map("time_limit")
+  allowedAttempts Int                 @map("allowed_attempts")
+  difficulty      Int
+  questions       Question[]
+  classTests      ClassTest[]
+  studentStatuses StudentTestStatus[]
+
+  @@map("test")
+}
+
+model Question {
+  id               Int             @id @default(autoincrement())
+  question         String
+  answer           String
+  isMultipleChoice Int             @map("is_multiple_choice")
+  choices          Json         
+  testid           Int
+  test             Test            @relation(fields: [testid], references: [id])
+  studentAnswers   StudentAnswer[]
+
+  @@map("question")
+}
+
+model StudentTestStatus {
+  studentid    String
+  testid       Int
+  dateCreated  Int             @map("date_created")
+  dateFinished Int             @map("date_finished")
+  duration     Int
+  result       Float           // REAL maps to Float in Prisma
+  student      Student         @relation(fields: [studentid], references: [uid])
+  test         Test            @relation(fields: [testid], references: [id])
+  answers      StudentAnswer[]
+
+  @@map("student_test_status")
+}
+
+model StudentAnswer {
+  sessionid  Int
+  questionid Int
+  answer     String
+  question   Question          @relation(fields: [questionid], references: [id])
+  session    StudentTestStatus @relation(fields: [sessionid], references: [sessionid])
+
+  @@id([sessionid, questionid]) // PRIMARY KEY("sessionid", "questionid")
+  @@map("student_answer")
+}
+
+// Many-to-Many Join Tables mapped explicitly from your schema constraints
+model ClassLesson {
+  classid  Int
+  lessonid Int
+  class    Class  @relation(fields: [classid], references: [id])
+  lesson   Lesson @relation(fields: [lessonid], references: [id])
+
+  @@id([classid, lessonid])
+  @@map("class_lesson")
+}
+
+model ClassTest {
+  classid Int
+  testid  Int
+  class   Class @relation(fields: [classid], references: [id])
+  test    Test  @relation(fields: [testid], references: [id])
+
+  @@id([testid, classid])
+  @@map("class_test")
+}
+
+model DictionaryEntry {
+  id        Int     @id @default(autoincrement())
+  word      String
+  description String
+  imageName String  @map("image_name")
+
+  @@map("dictionary_entry")
+}

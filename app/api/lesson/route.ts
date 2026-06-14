@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     // 3. Map the results so it returns a clean array of Lesson objects directly
     const lessons = classLessons.map((cl) => cl.lesson);
-
+    console.log(lessons)
     return NextResponse.json(
       { 
         classid: classId,

@@ -15,6 +15,7 @@ async function main() {
   await prisma.classTest.deleteMany();
   await prisma.class.deleteMany();
   await prisma.lesson.deleteMany();
+  await prisma.question.deleteMany();
   await prisma.test.deleteMany();
   await prisma.teacher.deleteMany();
 
@@ -56,7 +57,7 @@ async function main() {
       "classid": 1
     },
     {
-      "uid": "MrBq1EAfvoYAswZZfJrbGSM2jlj1",
+      "uid": "MrBq1EAfvoYAswZZfJrbGSM2jIj1",
       "firstname": "John",
       "lastname": "Doe",
       "classid": 2
@@ -146,7 +147,7 @@ async function main() {
       "question": "Tren troi co con gi?",
       "answer": "Con chim",
       "isMultipleChoice": 1,
-      "choices": ["Con chim", "Con bo", "Con ho", "C"],
+      "choices": ["Con chim", "Con bo", "Con ho", "Ca"],
       "testid": 123
     },
     {
@@ -154,7 +155,7 @@ async function main() {
       "question": "Tren troi co con gi?",
       "answer": "Con chim",
       "isMultipleChoice": 1,
-      "choices": ["Con chim", "Con cho", "Con meo"],
+      "choices": ["Con chim", "Con cho", "Con meo", "Con"],
       "testid": 123
     },
     {
@@ -178,7 +179,7 @@ async function main() {
       "question": "Placeholder",
       "answer": "3",
       "isMultipleChoice": 1,
-      "choices": ["1", "2", "3"],
+      "choices": ["1", "2", "3", "4"],
       "testid": 456
     },
     {
@@ -194,7 +195,7 @@ async function main() {
       "question": "Đây là câu hỏi 2",
       "answer": "đáp án đúng",
       "isMultipleChoice": 1,
-      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đú"],
+      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "A"],
       "testid": 789
     },
     {
@@ -202,7 +203,7 @@ async function main() {
       "question": "Đây là câu hỏi 3",
       "answer": "đáp án đúng",
       "isMultipleChoice": 1,
-      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đú"],
+      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "A"],
       "testid": 789
     },
     {
@@ -218,7 +219,7 @@ async function main() {
       "question": "Đây là câu hỏi 5",
       "answer": "đáp án đúng",
       "isMultipleChoice": 1,
-      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đú"],
+      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "A"],
       "testid": 789
     },
     {
@@ -226,7 +227,7 @@ async function main() {
       "question": "Đây là câu hỏi 6",
       "answer": "đáp án đúng",
       "isMultipleChoice": 1,
-      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đú"],
+      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "A"],
       "testid": 789
     },
     {
@@ -242,7 +243,7 @@ async function main() {
       "question": "Đây là câu hỏi 8",
       "answer": "đáp án đúng",
       "isMultipleChoice": 1,
-      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đú"],
+      "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "as"],
       "testid": 789
     }
   ]

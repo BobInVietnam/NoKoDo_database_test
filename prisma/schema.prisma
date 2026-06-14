@@ -49,7 +49,7 @@ model Lesson {
   name        String
   content     Json          @default("{}")
   difficulty  Int
-  dateCreated Int           @map("date_created") // Keeping as Int to match your SQLite schema
+  dateCreated BigInt           @map("date_created")
   classes     ClassLesson[]
 
   @@map("lesson")
@@ -58,7 +58,7 @@ model Lesson {
 model Test {
   id              Int                 @id @default(autoincrement())
   name            String
-  dateCreated     Int                 @map("date_created")
+  dateCreated     BigInt                 @map("date_created")
   timeLimit       Int                 @map("time_limit")
   allowedAttempts Int                 @map("allowed_attempts")
   difficulty      Int
@@ -85,8 +85,8 @@ model Question {
 model StudentTestStatus {
   studentid    String
   testid       Int
-  dateCreated  Int             @map("date_created")
-  dateFinished Int             @map("date_finished")
+  dateCreated  BigInt             @map("date_created")
+  dateFinished BigInt             @map("date_finished")
   duration     Int
   result       Float           
   student      Student         @relation(fields: [studentid], references: [uid])
@@ -101,7 +101,7 @@ model StudentTestStatus {
 model StudentAnswer {
   studentid  String          // 2. Added to match the new parent identity
   testid     Int             // 2. Added to match the new parent identity
-  dateCreated Int             // 2. Added to match the new parent identity
+  dateCreated BigInt             // 2. Added to match the new parent identity
   questionid Int
   answer     String?
   question   Question        @relation(fields: [questionid], references: [id])

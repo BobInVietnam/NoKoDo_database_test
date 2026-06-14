@@ -56,30 +56,30 @@ export async function GET(request: NextRequest) {
       }
     })
 
-  const testInfo = testList.map((item) => {
-    const currentTest = item.test;
-    const statuses = currentTest.studentStatuses;
+    const testInfo = testList.map((item) => {
+      const currentTest = item.test;
+      const statuses = currentTest.studentStatuses;
 
-    // 1. Calculate the total count of submissions for this test
-    const submissionCount = statuses.length;
+      // 1. Calculate the total count of submissions for this test
+      const submissionCount = statuses.length;
 
-    // 2. Extract the highest score (the first item because of our descending order)
-    const highestScore = submissionCount > 0 ? statuses[0].result : null;
+      // 2. Extract the highest score (the first item because of our descending order)
+      const highestScore = submissionCount > 0 ? statuses[0].result : null;
 
-    return {
-      id: currentTest.id,
-      name: currentTest.name,
-      difficulty: currentTest.difficulty,
-      time_limit: currentTest.timeLimit,
-      date_created: currentTest.dateCreated,
-      
-      // Your calculated statistics fields:
-      attempts: submissionCount,
-      allowed_attempts: currentTest.allowedAttempts,
-      result: highestScore,
-    };
-  });
-
+      return {
+        id: currentTest.id,
+        name: currentTest.name,
+        difficulty: currentTest.difficulty,
+        time_limit: currentTest.timeLimit,
+        date_created: currentTest.dateCreated,
+        
+        // Your calculated statistics fields:
+        attempts: submissionCount,
+        allowed_attempts: currentTest.allowedAttempts,
+        result: highestScore,
+      };
+    });
+    console.log(testInfo)
     return NextResponse.json(
       { 
         classid: classId,

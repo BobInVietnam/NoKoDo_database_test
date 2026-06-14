@@ -60,7 +60,7 @@ export async function GET(
         { status: 404 }
       );
     }
-
+    console.log(testData)
     // 4. Return the combined metadata + questions payload
     return NextResponse.json(testData, { status: 200 });
 

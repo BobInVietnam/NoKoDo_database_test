@@ -17,14 +17,16 @@ export async function GET (
 ) {
     try {
         const param = await context.params
-        const studetnuid = param.uid
-
-        const studentInfo = await prisma.student.findFirst({
+        const studentuid = param.uid
+        console.log(studentuid)
+        const studentInfo = await prisma.student.findUnique({
             where: {
-                uid: studetnuid
+                uid: studentuid
             }
         })
-        return NextResponse.json( studentInfo,
+        console.log(studentInfo)
+        return NextResponse.json( 
+            studentInfo,
             {status: 200}
         )
     } catch (error: any) {
@@ -34,5 +36,4 @@ export async function GET (
             { status: 500 }
         );
     }
-
 }

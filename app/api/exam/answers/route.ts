@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       data: answersData,
       skipDuplicates: true,
     });
-
+    
     return NextResponse.json(
       { 
         message: `${result.count} student answers recorded successfully.`, 

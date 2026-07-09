@@ -62,7 +62,15 @@ export async function GET(
     }
     console.log(testData)
     // 4. Return the combined metadata + questions payload
-    return NextResponse.json(testData, { status: 200 });
+    return NextResponse.json({
+      ...testData,
+      dateCreated: Number(testData.dateCreated),
+      studentStatuses: testData.studentStatuses.map((status) => ({
+        ...status,
+        dateCreated: Number(status.dateCreated),
+        dateFinished: Number(status.dateFinished),
+      })),
+    }, { status: 200 });
 
   } catch (error: any) {
     console.error('❌ GET Exam API Error:', error);
@@ -151,7 +159,14 @@ export async function POST(
     });
 
     return NextResponse.json(
-      { message: 'Test session recorded cleanly.', data: savedRecord },
+      { 
+        message: 'Test session recorded cleanly.', 
+        data: {
+          ...savedRecord,
+          dateCreated: Number(savedRecord.dateCreated),
+          dateFinished: Number(savedRecord.dateFinished),
+        }
+      },
       { status: 201 }
     );
 

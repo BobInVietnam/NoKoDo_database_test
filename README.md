@@ -26,7 +26,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 If it's the first time running the database. Follow the instruction in https://www.prisma.io/docs/prisma-orm/quickstart/prisma-postgres to install the required dependencies, and run the following
 
 ```bash
-npx prisma db migrate dev --name init
+npx prisma migrate dev --name init
 npx prisma generate
 ```
 To populate the database

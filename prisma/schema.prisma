@@ -47,6 +47,8 @@ model Class {
 model Lesson {
   id          Int           @id @default(autoincrement())
   name        String
+  type        Int
+  description String
   content     Json          @default("{}")
   difficulty  Int
   dateCreated BigInt           @map("date_created")

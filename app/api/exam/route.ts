@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
         name: currentTest.name,
         difficulty: currentTest.difficulty,
         time_limit: currentTest.timeLimit,
-        date_created: currentTest.dateCreated,
+        date_created: Number(currentTest.dateCreated),
         
         // Your calculated statistics fields:
         attempts: submissionCount,

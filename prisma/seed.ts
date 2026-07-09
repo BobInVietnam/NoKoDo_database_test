@@ -73,14 +73,13 @@ async function main() {
   // 5. Create a Mock Lesson with JSONB Data
   const lesson = await prisma.lesson.create({
     data: {
-      name: 'Introduction to Verbs',
+      name: 'Giới thiệu về vần a, ă, â',
       difficulty: 1,
+      type: 0,
+      description: 'Bài tập đọc nho nhỏ dành cho các em',
       dateCreated: Math.floor(Date.now() / 1000),
       content: {
-        introduction: "Welcome to your grammar lesson!",
-        slides: [
-          { title: "What is a Verb?", text: "An action word." }
-        ]
+        text: "Ba bà cháu gây dựng trang trại mật ong. Mọi người ăn mật ong thật ngon lành."
       }
     },
   });

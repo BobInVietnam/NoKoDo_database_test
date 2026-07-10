@@ -13,13 +13,21 @@ const prisma = new PrismaClient({ adapter });
  */
 export async function GET(request: NextRequest) {
   try {
-    // 1. Extract the classid parameter from the request URL
+    // 1. Extract the parameters from the request URL
     const { searchParams } = new URL(request.url);
     const classIdParam = searchParams.get('classid');
+    const studentId = searchParams.get('studentid');
 
     if (!classIdParam) {
       return NextResponse.json(
         { error: 'Missing required query parameter: classid' },
+        { status: 400 }
+      );
+    }
+
+    if (!studentId) {
+      return NextResponse.json(
+        { error: 'Missing required query parameter: studentid' },
         { status: 400 }
       );
     }
@@ -42,15 +50,30 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // 3. Map the results so it returns a clean array of Lesson objects directly
+    // 3. Fetch completed lessons for this student
+    const studentCompletedLessons = await prisma.studentLesson.findMany({
+      where: {
+        studentid: studentId,
+      },
+      select: {
+        lessonid: true,
+      },
+    });
+
+    const completedLessonIds = new Set(studentCompletedLessons.map((sl) => sl.lessonid));
+
+    // 4. Map the results so it returns a clean array of Lesson objects directly with completion status
     const lessons = classLessons.map((cl) => ({
       ...cl.lesson,
       dateCreated: Number(cl.lesson.dateCreated),
+      isDone: completedLessonIds.has(cl.lesson.id),
     }));
-    console.log(lessons)
+
+    console.log(lessons);
     return NextResponse.json(
       { 
         classid: classId,
+        studentid: studentId,
         count: lessons.length, 
         lessons 
       }, 

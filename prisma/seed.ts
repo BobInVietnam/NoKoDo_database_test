@@ -11,6 +11,7 @@ async function main() {
   await prisma.studentAnswer.deleteMany();
   await prisma.studentTestStatus.deleteMany();
   await prisma.student.deleteMany();
+  await prisma.studentLesson.deleteMany();
   await prisma.classLesson.deleteMany();
   await prisma.classTest.deleteMany();
   await prisma.class.deleteMany();
@@ -18,6 +19,7 @@ async function main() {
   await prisma.question.deleteMany();
   await prisma.test.deleteMany();
   await prisma.teacher.deleteMany();
+  await prisma.dictionaryEntry.deleteMany();
 
   // 2. Create a Mock Teacher
   const teacher = await prisma.teacher.create({
@@ -31,8 +33,8 @@ async function main() {
 
   // 3. Create a Class linked to that Teacher
   const classes = [
-    {id: 1, className: 'Lop 1', teacherid: teacher.uid},
-    {id: 2, className: 'Lop 2', teacherid: teacher.uid},
+    {"id": 1, "className": 'Lop 1', "teacherid": teacher.uid},
+    {"id": 2, "className": 'Lop 2', "teacherid": teacher.uid},
   ]
   for (const cl of classes) {
     await prisma.class.create({
@@ -71,21 +73,49 @@ async function main() {
   console.log(`Created students`);
 
   // 5. Create a Mock Lesson with JSONB Data
-  const lesson = await prisma.lesson.create({
-    data: {
-      name: 'Giới thiệu về vần a, ă, â',
-      difficulty: 1,
-      type: 0,
-      description: 'Bài tập đọc nho nhỏ dành cho các em',
-      dateCreated: Math.floor(Date.now() / 1000),
-      content: {
-        text: "Ba bà cháu gây dựng trang trại mật ong. Mọi người ăn mật ong thật ngon lành."
+  const lessons = [
+    {
+      "id": 1,
+      "name": "Giới thiệu về vần a, ă, â",
+      "difficulty": 1,
+      "type": 0,
+      "description": "Bài tập đọc nho nhỏ dành cho các em",
+      "dateCreated": 1778412562,
+      "content": {
+        "text": "Ba bà cháu gây dựng trang trại mật ong. Mọi người ăn mật ong thật ngon lành."
       }
     },
-  });
-  console.log(`Created lesson: ${lesson.name}`);
+    {
+      "id": 2,
+      "name": "Giới thiệu về vần b, d, p, q",
+      "difficulty": 1,
+      "type": 0,
+      "description": "Bài tập đọc nho nhỏ dành cho các em thứ 2",
+      "dateCreated": 1778412562,
+      "content": {
+        "text": "Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho."
+      }
+    },
+    {
+      "id": 3,
+      "name": "Trò chơi tìm chữ a",
+      "difficulty": 1,
+      "type": 1,
+      "description": "Trò chơi tìm chữ hi hi hi",
+      "dateCreated": 1778412562,
+      "content": {
+        "text": "Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho."
+      }
+    }
+  ]
+  for (const l of lessons) {
+    await prisma.lesson.create({
+      data: l
+    });
+  }
+  console.log(`Created lessons`);
 
-    const testList = [
+  const testList = [
     {
       "id": 123,
       "name": "Test 1",
@@ -125,9 +155,21 @@ async function main() {
     {"classid": 2, "testid": 456},
     {"classid": 2, "testid": 789}
   ]
-
   for (const ct of classTestList) {
     await prisma.classTest.create({
+      data: ct
+    })
+  }
+
+  const classLessonList = [
+    {"classid": 1, "lessonid": 1},
+    {"classid": 1, "lessonid": 2},
+    {"classid": 2, "lessonid": 1},
+    {"classid": 2, "lessonid": 2},
+    {"classid": 2, "lessonid": 3},
+  ]
+  for (const ct of classLessonList) {
+    await prisma.classLesson.create({
       data: ct
     })
   }

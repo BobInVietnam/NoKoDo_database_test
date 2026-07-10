@@ -70,12 +70,12 @@ export async function GET(request: NextRequest) {
         id: currentTest.id,
         name: currentTest.name,
         difficulty: currentTest.difficulty,
-        time_limit: currentTest.timeLimit,
-        date_created: Number(currentTest.dateCreated),
+        timeLimit: currentTest.timeLimit,
+        dateCreated: Number(currentTest.dateCreated),
         
         // Your calculated statistics fields:
         attempts: submissionCount,
-        allowed_attempts: currentTest.allowedAttempts,
+        allowedAttempts: currentTest.allowedAttempts,
         result: highestScore,
       };
     });

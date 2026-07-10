@@ -26,15 +26,20 @@ model Student {
   firstname  String
   lastname   String?
   classid    Int                 @default(1)
+  totalTime  Int                 @default(0)  @map("total_time") //seconds
+  totalLessonDone Int            @default(0)  @map("total_lesson_done")
+  totalExamDone Int              @default(0)  @map("total_exam_done")
+  averageScore Float             @default(0)  @map("average_score")
   class      Class               @relation(fields: [classid], references: [id])
   testStatuses StudentTestStatus[]
+  studentLessons StudentLesson[]
 
   @@map("student")
 }
 
 model Class {
   id         Int         @id @default(autoincrement()) // PRIMARY KEY ("id")
-  className  String      @map("class name")
+  className  String      @map("class_name")
   teacherid  String
   teacher    Teacher     @relation(fields: [teacherid], references: [uid])
   students   Student[]
@@ -53,6 +58,7 @@ model Lesson {
   difficulty  Int
   dateCreated BigInt           @map("date_created")
   classes     ClassLesson[]
+  students    StudentLesson[]
 
   @@map("lesson")
 }
@@ -84,6 +90,16 @@ model Question {
   @@map("question")
 }
 
+model StudentLesson {
+  studentid    String         
+  lessonid     Int
+  student      Student         @relation(fields: [studentid], references: [uid])
+  lesson       Lesson          @relation(fields: [lessonid], references: [id])
+
+  @@id([studentid, lessonid])
+  @@map("student_lesson")
+}
+
 model StudentTestStatus {
   studentid    String
   testid       Int
@@ -103,7 +119,7 @@ model StudentTestStatus {
 model StudentAnswer {
   studentid  String          // 2. Added to match the new parent identity
   testid     Int             // 2. Added to match the new parent identity
-  dateCreated BigInt             // 2. Added to match the new parent identity
+  dateCreated BigInt         @map("date_created")    // 2. Added to match the new parent identity
   questionid Int
   answer     String?
   question   Question        @relation(fields: [questionid], references: [id])

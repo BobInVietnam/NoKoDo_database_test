@@ -37,3 +37,38 @@ export async function GET (
         );
     }
 }
+
+export async function POST (
+    request: NextRequest,
+    context: RouteContext
+) {
+    try {
+        const param = await context.params;
+        const studentuid = param.uid;
+        
+        const body = await request.json();
+        const { totalTime } = body;
+
+        const updatedStudent = await prisma.student.update({
+            where: {
+                uid: studentuid
+            },
+            data: {
+                totalTime
+            }
+        });
+
+        console.log('✅ Student updated:', updatedStudent);
+        return NextResponse.json(
+            updatedStudent,
+            { status: 201 }
+        );
+    } catch (error: any) {
+        console.error('❌ POST Student API Error:', error);
+        return NextResponse.json(
+            { error: 'Database update failed', details: error.message },
+            { status: 500 }
+        );
+    }
+}
+

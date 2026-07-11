@@ -27,9 +27,6 @@ model Student {
   lastname   String?
   classid    Int                 @default(1)
   totalTime  Int                 @default(0)  @map("total_time") //seconds
-  totalLessonDone Int            @default(0)  @map("total_lesson_done")
-  totalExamDone Int              @default(0)  @map("total_exam_done")
-  averageScore Float             @default(0)  @map("average_score")
   class      Class               @relation(fields: [classid], references: [id])
   testStatuses StudentTestStatus[]
   studentLessons StudentLesson[]

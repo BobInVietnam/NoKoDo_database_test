@@ -90,6 +90,7 @@ model Question {
 model StudentLesson {
   studentid    String         
   lessonid     Int
+  results      Json
   student      Student         @relation(fields: [studentid], references: [uid])
   lesson       Lesson          @relation(fields: [lessonid], references: [id])
 
@@ -157,4 +158,11 @@ model DictionaryEntry {
   imageName String  @map("image_name")
 
   @@map("dictionary_entry")
+}
+
+model SystemConfig {
+  key String @id
+  value String
+
+  @@map("system_config")
 }

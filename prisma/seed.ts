@@ -10,10 +10,10 @@ async function main() {
   // 1. Clean out existing records to avoid unique key/relational constraint errors
   await prisma.studentAnswer.deleteMany();
   await prisma.studentTestStatus.deleteMany();
-  await prisma.student.deleteMany();
   await prisma.studentLesson.deleteMany();
   await prisma.classLesson.deleteMany();
   await prisma.classTest.deleteMany();
+  await prisma.student.deleteMany();
   await prisma.class.deleteMany();
   await prisma.lesson.deleteMany();
   await prisma.question.deleteMany();
@@ -47,7 +47,7 @@ async function main() {
 
   const students = [
     {
-      "uid": "ZgDTxfh7uWgYldxcX0zEK2acvuD2",
+      "uid": "ZgDTxfh7uWgYIdxcX0zEK2acvuD2",
       "firstname": "Hung",
       "lastname": "CaoXuan",
       "classid": 1
@@ -93,7 +93,7 @@ async function main() {
       "description": "Bài tập đọc nho nhỏ dành cho các em thứ 2",
       "dateCreated": 1778412562,
       "content": {
-        "text": "Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho."
+        "text": "Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho. Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho. Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.\nPa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.\n\nPa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.\n\nPa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.\nPa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.\nPa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.\nPa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.\nPa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.\nPa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.\nPa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho.Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho."
       }
     },
     {
@@ -104,7 +104,53 @@ async function main() {
       "description": "Trò chơi tìm chữ hi hi hi",
       "dateCreated": 1778412562,
       "content": {
-        "text": "Pa pa pi po, bo ba bo bo, do di de do, bo ho bo ho."
+        "cases": [
+          {
+            "height": 7,
+            "width": 9,
+            "target": "d",
+            "noise": ["b", "p", "q"],
+            "chance": 0.35,
+            "spacing": 0.0,
+            "size": 42.0
+          },
+          {
+            "height": 7,
+            "width": 9,
+            "target": "t",
+            "noise": ["f", "l", "i"],
+            "chance": 0.40,
+            "spacing": 6.0,
+            "size": 28.0
+          },
+          {
+            "height": 7,
+            "width": 9,
+            "target": "n",
+            "noise": ["u", "m", "h"],
+            "chance": 0.45,
+            "spacing": 2.0,
+            "size": 56.0
+          },
+          {
+            "height": 5,
+            "width": 7,
+            "target": "ă",
+            "noise": ["a", "ã", "â"],
+            "chance": 0.80,
+            "spacing": 1.0,
+            "size": 40.0
+          },
+          {
+            "height": 5,
+            "width": 11,
+            "target": "ê",
+            "noise": ["ẽ", "è", "é"],
+            "chance": 0.80,
+            "spacing": 3.0,
+            "size": 66.0
+          }
+        ]
       }
     }
   ]
@@ -308,6 +354,14 @@ async function main() {
 
   for (const item of vocabulary) {
     await prisma.dictionaryEntry.create({ data: item });
+  }
+
+  const configs = [
+    {key: 'dictVersion', value: 'v1'}
+  ]
+
+  for (const c of configs) {
+    await prisma.systemConfig.create({data: c});
   }
 
   console.log('✅ Seeding complete!');

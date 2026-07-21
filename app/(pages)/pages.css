@@ -1,0 +1,261 @@
+.container {
+  display: flex;
+  font-family: Arial, sans-serif;
+  flex-direction: column;
+  padding: 20px;
+  margin-left: 100px;
+  margin-right: 20px;
+  gap: 10px;
+}
+
+.title h1 {
+  padding-right: 10px;
+  padding-bottom: 10px;
+  font-size: 37px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Sidebar */
+.icon {
+  position: relative;
+  color: white;
+  width: 60px;
+  height: 60px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.icon:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+.icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 50%;
+  left: 70px;
+  transform: translateY(-50%);
+
+  background-color: #2b548a;
+  color: white;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 12px;
+  white-space: nowrap;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+}
+.icon:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+.icon.active {
+  background: white;
+  color: #2f4b8f;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 60px;
+  height: 100vh;
+  background: #2f4b8f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Dashboard */
+.recent-activity {
+  font-size: 25px;
+  margin-left: 40px;
+  border-bottom: 1px solid #ccc;
+  display: inline-block;
+  margin-top: 20px;
+  width: fit-content;
+}
+.activity-list {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+
+  padding: 25px;
+  border-radius: 15px;
+
+  border: 1px solid #ddd;
+  background: #fff;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.activity-item:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+/* Profile */
+.profile-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+.profile {
+  margin-left: 40px;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 20px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.edit-btn {
+  margin-left: auto;
+  margin-bottom: auto;
+  display: flex;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.edit-btn button, button.add-btn {
+  height: fit-content;
+  display: inline-flex;
+  background: #eee;
+  color: #333;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 3px;
+  border: 1px solid #aaa;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+}
+.edit-btn button:hover, button.add-btn:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: #eee;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 40px;
+  color: #777;
+}
+/* Classes */
+.class-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.class-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 25px;
+  border-radius: 15px;
+
+  border: 1px solid #ddd;
+  background: #fff;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.class-item:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+button.add-btn {
+  background: #2b78c5;
+  color: white;
+}
+/* class */
+.student-list {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+.student-item {
+  display: flex;
+  align-items: center;
+
+  padding: 25px;
+  border-radius: 15px;
+
+  border: 1px solid #ddd;
+  background: #fff;
+
+  cursor: pointer;
+}
+/* CSS cho bảng danh sách học sinh */
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+}
+
+.student-table th,
+.student-table td {
+  border: 1px solid #e0e0e0;
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.student-table th {
+  background-color: #f9f9f9;
+  font-weight: bold;
+  color: #333;
+}
+
+.student-table tbody tr:hover {
+  background-color: #f1f5f9;
+  transition: background-color 0.2s ease;
+}
+/* lessons */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.tool-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 25px;
+  border-radius: 15px;
+
+  border: 1px solid #ddd;
+  background: #fff;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tool-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}

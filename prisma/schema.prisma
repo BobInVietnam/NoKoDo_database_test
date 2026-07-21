@@ -13,10 +13,12 @@ datasource db {
 }
 
 model Teacher {
-  uid       String   @id // Primary Key ("uid")
-  firstname String
-  lastname  String?
-  classes   Class[]
+  uid          String   @id // Primary Key ("uid")
+  firstname    String
+  lastname     String?
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  classes      Class[]
 
   @@map("teacher")
 }
@@ -27,6 +29,8 @@ model Student {
   lastname   String?
   classid    Int                 @default(1)
   totalTime  Int                 @default(0)  @map("total_time") //seconds
+  gender     String?
+  dateOfBirth BigInt?            @map("date_of_birth")
   class      Class               @relation(fields: [classid], references: [id])
   testStatuses StudentTestStatus[]
   studentLessons StudentLesson[]

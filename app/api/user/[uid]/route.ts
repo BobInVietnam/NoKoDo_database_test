@@ -6,12 +6,12 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 interface RouteContext {
-  params: Promise<{
-    uid: string; // This matches the [uid] folder name exactly
-  }>;
+    params: Promise<{
+        uid: string; // This matches the [uid] folder name exactly
+    }>;
 }
 
-export async function GET (
+export async function GET(
     response: NextRequest,
     context: RouteContext
 ) {
@@ -25,9 +25,12 @@ export async function GET (
             }
         })
         console.log(studentInfo)
-        return NextResponse.json( 
-            studentInfo,
-            {status: 200}
+        return NextResponse.json(
+            {
+                ...studentInfo,
+                dateOfBirth: Number(studentInfo?.dateOfBirth)
+            },
+            { status: 200 }
         )
     } catch (error: any) {
         console.error('❌ GET Student API Error:', error);
@@ -38,14 +41,14 @@ export async function GET (
     }
 }
 
-export async function POST (
+export async function POST(
     request: NextRequest,
     context: RouteContext
 ) {
     try {
         const param = await context.params;
         const studentuid = param.uid;
-        
+
         const body = await request.json();
         const { totalTime } = body;
 
@@ -60,7 +63,9 @@ export async function POST (
 
         console.log('✅ Student updated:', updatedStudent);
         return NextResponse.json(
-            updatedStudent,
+            {...updatedStudent,
+                dateOfBirth: Number(updatedStudent.dateOfBirth)
+            },
             { status: 201 }
         );
     } catch (error: any) {

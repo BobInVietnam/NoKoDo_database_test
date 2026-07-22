@@ -1,9 +1,11 @@
+import Link from "next/link";
 import Sidebar from "@/components/Sidebar";
 import { getStudentData } from "@/services/student.service";
 import AddStudentModal from "@/components/AddStudentModal";
 import DeleteStudentButton from "@/components/DeleteStudentButton";
 import { verifyAuth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 
 export default async function ClassDetailPage({
   params,
@@ -24,8 +26,27 @@ export default async function ClassDetailPage({
     return (
       <div className="container">
         <Sidebar />
-        <div className="title">
-          <h1>
+        <div className="title" style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+          <Link
+            href="/lessons"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              backgroundColor: "#fff",
+              border: "1px solid #ccc",
+              boxShadow: "0 2px 5px rgba(0,0,0,0.08)",
+              color: "#333",
+              textDecoration: "none",
+            }}
+            title="Quay lại"
+          >
+            <ArrowLeft size={22} />
+          </Link>
+          <h1 style={{display: "flex", flexGrow: 1 }}>
             <b>{className}</b>
           </h1>
         </div>

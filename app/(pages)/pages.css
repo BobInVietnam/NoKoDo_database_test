@@ -259,3 +259,45 @@ button.add-btn {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transform: translateY(-4px);
 }
+
+/* Standard Button Classes */
+.btn-action {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  background-color: #eee;
+  color: #333;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.btn-action:hover {
+  background-color: #ddd;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.btn-delete {
+  padding: 8px 16px;
+  border: none;
+  background-color: #ff4d4f;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.btn-delete:hover {
+  background-color: #ff7875;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+

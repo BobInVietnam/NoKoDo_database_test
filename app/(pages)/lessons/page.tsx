@@ -1,4 +1,5 @@
 import Sidebar from "@/components/Sidebar";
+import Link from "next/link";
 import { verifyAuth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
@@ -9,8 +10,8 @@ export default async function LessonsPage() {
   }
 
   const tools = [
-    { title: "Quản lý bài tập" },
-    { title: "Quản lý bài kiểm tra" },
+    { title: "Quản lý bài tập", href: "/lessons/classes?type=lesson" },
+    { title: "Quản lý bài kiểm tra", href: "/lessons/classes?type=test" },
   ];
   return (
     <div className="container">
@@ -22,9 +23,11 @@ export default async function LessonsPage() {
       </div>
       <div className="card-grid">
         {tools.map((tool, index) => (
-          <div className="tool-card" key={index}>
-            <p>{tool.title}</p>
-          </div>
+          <Link href={tool.href} key={index} style={{ textDecoration: "none", color: "inherit" }}>
+            <div className="tool-card">
+              <p><b>{tool.title}</b></p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

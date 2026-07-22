@@ -27,7 +27,7 @@ export default async function ClassesPage() {
     <div className="container">
       <Sidebar />
 
-      <div className="title">
+      <div className="title" >
         <h1>
           <b>Classes</b>
         </h1>
@@ -44,41 +44,46 @@ export default async function ClassesPage() {
       ) : (
         <div className="class-list">
           {classes.map((cls) => (
-            <div
-              key={cls.id}
-              className="class-item"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+            <div key={cls.id}>
               <Link
                 href={`/classes/${cls.id}`}
+                className="class-item"
                 style={{
+                  display: "flex",
                   flexGrow: 1,
                   textDecoration: "none",
                   color: "inherit",
                   fontWeight: "bold",
                 }}
               >
-                {cls.classname}
-
-                <span
+                <div
                   style={{
-                    fontWeight: "bold",
-                    color: "#333",
-                    marginLeft: "15px",
+                    display: "flex",
+                    flexGrow: 1,
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  - {cls.studentCount} HS
-                </span>
+                  <p>
+                    {cls.classname}
+
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        marginLeft: "15px",
+                      }}
+                    >
+                      - {cls.studentCount} HS
+                    </span>
+                  </p>
+                  <DeleteClassButton
+                    classId={cls.id}
+                    classname={cls.classname}
+                    firebaseUid={decoded.uid}
+                  />
+                </div>
               </Link>
-              <DeleteClassButton
-                classId={cls.id}
-                classname={cls.classname}
-                firebaseUid={decoded.uid}
-              />
             </div>
           ))}
         </div>

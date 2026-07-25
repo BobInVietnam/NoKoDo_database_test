@@ -27,6 +27,8 @@ model Student {
   uid        String              @id // Primary Key ("uid")
   firstname  String
   lastname   String?
+  email      String             @unique
+  passwordHash String            @map("password_hash")
   classid    Int                 @default(1)
   totalTime  Int                 @default(0)  @map("total_time") //seconds
   gender     String?

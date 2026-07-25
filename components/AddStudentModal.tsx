@@ -13,23 +13,27 @@ export default function AddStudentModal({ classId }: AddStudentModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [birthday, setBirthday] = useState("");
   const [gender, setGender] = useState("Nam");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.ChangeEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!firstName || !lastName)
+    if (!firstName || !lastName || !email || !password)
       return alert("Vui lòng điền đủ thông tin");
 
     setLoading(true);
     try {
-      const res = await addStudent({ firstName, lastName, birthday, gender, classId });
+      const res = await addStudent({ firstName, lastName, email, password, birthday, gender, classId });
       if (res && res.id) {
         alert("Thêm học sinh thành công!");
         setIsOpen(false);
         setFirstName("");
         setLastName("");
+        setEmail("");
+        setPassword("");
         setBirthday("");
         setGender("Nam");
         window.location.reload();
@@ -104,6 +108,30 @@ export default function AddStudentModal({ classId }: AddStudentModalProps) {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Ví dụ: An"
+                  style={inputStyle}
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Email đăng nhập:</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Ví dụ: hocsinh@nokodo.edu.vn"
+                  style={inputStyle}
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Mật khẩu:</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Nhập mật khẩu cho học sinh"
                   style={inputStyle}
                   required
                 />

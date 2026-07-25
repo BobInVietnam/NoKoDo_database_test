@@ -3,6 +3,7 @@
 import { PrismaClient } from '@/app/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { verifyAuth } from '@/lib/auth';
+import * as argon2 from "argon2";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -63,6 +64,8 @@ export async function getStudentData(classId: string, uid?: string) {
 export async function addStudent(studentData: {
   firstName: string;
   lastName: string;
+  email: string;
+  password?: string;
   birthday?: string;
   gender?: string;
   classId: string;
@@ -71,9 +74,12 @@ export async function addStudent(studentData: {
     const decoded = await verifyAuth();
     if (!decoded) return null;
 
-    const { firstName, lastName, birthday, gender, classId } = studentData;
+    const { firstName, lastName, email, password, birthday, gender, classId } = studentData;
     const classIdNum = parseInt(classId, 10);
     const studentUid = `std_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+
+    const rawPassword = password || "password123";
+    const passwordHash = await argon2.hash(rawPassword, { type: argon2.argon2id });
 
     let dobBigInt: bigint | null = null;
     if (birthday) {
@@ -89,6 +95,8 @@ export async function addStudent(studentData: {
         uid: studentUid,
         firstname: firstName,
         lastname: lastName,
+        email: email.trim().toLowerCase(),
+        passwordHash: passwordHash,
         classid: classIdNum,
         gender: gender || null,
         dateOfBirth: dobBigInt,

@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json(
-      { message: "Đăng nhập thành công", student: safeStudent },
+      { message: "Đăng nhập thành công", student: safeStudent, token: token },
       { status: 200 }
     );
   } catch (error: any) {

@@ -20,6 +20,22 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Installing Ollama (gemma4:31b-cloud)
+
+To use the online model (for testing purpose), you must install Ollama, create an account on ollama.com and sign in.
+
+In the terminal, run 
+
+```bash
+ollama signin
+```
+
+Then
+
+```bash
+ollama pull gemma4:31b-cloud
+```
+
 ## Running the Database
 
 

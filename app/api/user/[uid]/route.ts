@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@/app/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { verifyAuth } from '@/lib/auth';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -16,9 +17,13 @@ export async function GET(
     context: RouteContext
 ) {
     try {
-        const param = await context.params
-        const studentuid = param.uid
-        console.log(studentuid)
+        const decoded = await verifyAuth(response);
+        if (!decoded) {
+            return NextResponse.json({ error: 'Không được phép truy cập' }, { status: 401 });
+        }
+        const param = await context.params;
+        const studentuid = param.uid;
+        console.log(studentuid);
         const studentInfo = await prisma.student.findUnique({
             where: {
                 uid: studentuid
@@ -28,7 +33,8 @@ export async function GET(
         return NextResponse.json(
             {
                 ...studentInfo,
-                dateOfBirth: Number(studentInfo?.dateOfBirth)
+                dateOfBirth: Number(studentInfo?.dateOfBirth),
+                passwordHash: undefined
             },
             { status: 200 }
         )
@@ -46,6 +52,10 @@ export async function POST(
     context: RouteContext
 ) {
     try {
+        const decoded = await verifyAuth(request);
+        if (!decoded) {
+            return NextResponse.json({ error: 'Không được phép truy cập' }, { status: 401 });
+        }
         const param = await context.params;
         const studentuid = param.uid;
 
@@ -64,7 +74,8 @@ export async function POST(
         console.log('✅ Student updated:', updatedStudent);
         return NextResponse.json(
             {...updatedStudent,
-                dateOfBirth: Number(updatedStudent.dateOfBirth)
+                dateOfBirth: Number(updatedStudent.dateOfBirth),
+                passwordHash: undefined
             },
             { status: 201 }
         );

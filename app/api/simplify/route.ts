@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAuth } from '@/lib/auth';
 
 const OLLAMA_API_URL = 'http://127.0.0.1:11434/api/generate';
 const MODEL_NAME = 'gemma4:31b-cloud';
@@ -9,6 +10,10 @@ const MODEL_NAME = 'gemma4:31b-cloud';
  */
 export async function POST(request: NextRequest) {
   try {
+    const decoded = await verifyAuth(request);
+    if (!decoded) {
+      return NextResponse.json({ error: 'Không được phép truy cập' }, { status: 401 });
+    }
     const body = await request.json();
     const text = body.text;
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@/app/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { verifyAuth } from '@/lib/auth';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -9,8 +10,13 @@ const prisma = new PrismaClient({ adapter });
  * GET /api/config
  * Returns all system config parameters as key-value pairs.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const decoded = await verifyAuth(request);
+    if (!decoded) {
+      return NextResponse.json({ error: 'Không được phép truy cập' }, { status: 401 });
+    }
+    
     const configs = await prisma.systemConfig.findMany();
     const configMap = configs.reduce((acc, config) => {
       acc[config.key] = config.value;

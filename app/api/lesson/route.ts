@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@/app/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { verifyAuth } from '@/lib/auth';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -12,6 +13,10 @@ const prisma = new PrismaClient({ adapter });
  */
 export async function GET(request: NextRequest) {
   try {
+    const decoded = await verifyAuth(request);
+    if (!decoded) {
+      return NextResponse.json({ error: 'Không được phép truy cập' }, { status: 401 });
+    }
     // 1. Extract the parameters from the request URL
     const { searchParams } = new URL(request.url);
     const classIdParam = searchParams.get('classid');
@@ -101,6 +106,10 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    const decoded = await verifyAuth(request);
+    if (!decoded) {
+      return NextResponse.json({ error: 'Không được phép truy cập' }, { status: 401 });
+    }
     const body = await request.json();
     const { studentid, lessonid, results } = body;
 

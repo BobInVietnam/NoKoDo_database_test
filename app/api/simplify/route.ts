@@ -23,18 +23,18 @@ export async function POST(request: NextRequest) {
 
     // A prompt tailored for text simplification suitable for readers with dyslexia
     const prompt = `Bạn là một trợ lý hỗ trợ người mắc hội chứng khó đọc (dyslexia). 
-Hãy đơn giản hóa đoạn văn bản tiếng Việt sau đây để giúp họ dễ đọc và dễ hiểu hơn.
+      Hãy đơn giản hóa đoạn văn bản tiếng Việt sau đây để giúp họ dễ đọc và dễ hiểu hơn.
 
-Yêu cầu thực hiện:
-1. Chia các câu dài, phức tạp thành các câu ngắn, đơn giản và rõ nghĩa.
-2. Thay thế các từ ngữ Hán Việt phức tạp, từ cổ hoặc từ khó hiểu bằng các từ thuần Việt thông dụng hơn.
-3. Sử dụng thể chủ động thay vì thể bị động.
-4. Trình bày nội dung một cách trực tiếp, mạch lạc và giữ nguyên ý nghĩa gốc của đoạn văn.
+      Yêu cầu thực hiện:
+      1. Chia các câu dài, phức tạp thành các câu ngắn, đơn giản và rõ nghĩa.
+      2. Thay thế các từ ngữ Hán Việt phức tạp, từ cổ hoặc từ khó hiểu bằng các từ thuần Việt thông dụng hơn.
+      3. Sử dụng thể chủ động thay vì thể bị động.
+      4. Trình bày nội dung một cách trực tiếp, mạch lạc và giữ nguyên ý nghĩa gốc của đoạn văn.
 
-Lưu ý: Chỉ trả về đoạn văn bản đã được đơn giản hóa. Không thêm bất kỳ lời dẫn, giải thích hay ký tự đặc biệt nào khác.
+      Lưu ý: Chỉ trả về đoạn văn bản đã được đơn giản hóa. Không thêm bất kỳ lời dẫn, giải thích hay ký tự đặc biệt nào khác.
 
-Văn bản cần đơn giản hóa:
-"${text}"`;
+      Văn bản cần đơn giản hóa:
+    "${text}"`;
 
     console.log(`🤖 Sending simplification request to Ollama using model "${MODEL_NAME}"...`);
     const response = await fetch(OLLAMA_API_URL, {

@@ -26,22 +26,37 @@ async function main() {
 
     // 2. Create a Mock Teacher
     const passwordHash = await argon2.hash("password123", { type: argon2.argon2id }); //TESTING PURPOSE ONLY!! MAKE THE HASH DURING REGISTRATION
+    const password2Hash = await argon2.hash("Password123!", { type: argon2.argon2id }); //TESTING PURPOSE ONLY!! MAKE THE HASH DURING REGISTRATION
 
-    const teacher = await tx.teacher.create({
-      data: {
+    const teachers = [
+      {
         uid: 'teacher_mock_123',
         firstname: 'Alex',
         lastname: 'Smith',
         email: 'teacher@nokodo.edu.vn',
         passwordHash: passwordHash,
       },
-    });
-    console.log(`Created teacher: ${teacher.firstname}`);
+      {
+        uid: 'teacher_mock_456',
+        firstname: 'Alex',
+        lastname: 'Stevehehe',
+        email: 'teacher2@nokodo.edu.vn',
+        passwordHash: password2Hash,
+      }
+    ]
+
+    for (const t of teachers) {
+      await tx.teacher.create({
+        data: t,
+      });
+    }
+    console.log(`Created teachers`);
 
     // 3. Create a Class linked to that Teacher
     const classes = [
-      {"id": 1, "className": 'Lop 1', "teacherid": teacher.uid},
-      {"id": 2, "className": 'Lop 2', "teacherid": teacher.uid},
+      {"id": 1, "className": 'Lop 1', "teacherid": teachers[0].uid},
+      {"id": 2, "className": 'Lop 2', "teacherid": teachers[0].uid},
+      {"id": 3, "className": 'Lop trong', "teacherid": teachers[1].uid},
     ]
     for (const cl of classes) {
       await tx.class.create({
@@ -67,7 +82,7 @@ async function main() {
         "firstname": "Bob",
         "lastname": "Vietnam",
         "email": "bob@nokodo.edu.vn",
-        "passwordHash": passwordHash,
+        "passwordHash": password2Hash,
         "classid": 1,
         "gender": "Nữ",
         "dateOfBirth": 100000,
@@ -289,7 +304,7 @@ async function main() {
       },
       {
         "id": 7891,
-        "question": "Đây là câu hỏi 1 (đáp án là \"Đáp án",
+        "question": "Đây là câu hỏi 1 (đáp án là \"đáp án đúng\")",
         "answer": "đáp án đúng",
         "isMultipleChoice": 0,
         "choices": "",

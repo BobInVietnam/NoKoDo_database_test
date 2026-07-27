@@ -52,14 +52,19 @@ export async function GET(
     });
     const testFinishedNumber = finishedTests.length;
 
-    // 4. Fetch average test score
-    const avgScoreResult = await prisma.studentTestStatus.aggregate({
+    // 4. Fetch the highest score for each unique test
+    const highestScores = await prisma.studentTestStatus.groupBy({
+      by: ['testid'],
       where: { studentid: uid },
-      _avg: {
+      _max: {
         result: true
       }
     });
-    const averageTestScore = Math.round(avgScoreResult._avg.result ?? 0);
+    let averageTestScore = 0;
+    if (highestScores.length > 0) {
+      const sum = highestScores.reduce((acc, curr) => acc + (curr._max.result ?? 0), 0);
+      averageTestScore = Math.round(sum / highestScores.length);
+    }
 
     // 5. Fetch class lesson count
     const lessonNumber = await prisma.classLesson.count({

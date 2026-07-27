@@ -58,7 +58,7 @@ export default function LessonsManagePage({ searchParams }: PageProps) {
 
   const typeLabel = type === "lesson" ? "bài tập" : "bài kiểm tra";
 
-  const handleEdit = (itemId: number) => {
+  const handleEdit = (itemId: string) => {
     if (type === "test") {
       router.push(`/lessons/edit-test/${itemId}`);
     } else {
@@ -74,7 +74,7 @@ export default function LessonsManagePage({ searchParams }: PageProps) {
     }
   };
 
-  const handleAssign = async (itemId: number) => {
+  const handleAssign = async (itemId: string) => {
     const res = await assignToClass(classId, itemId, type);
     if (res.success) {
       loadData();
@@ -83,7 +83,7 @@ export default function LessonsManagePage({ searchParams }: PageProps) {
     }
   };
 
-  const handleRemove = async (itemId: number) => {
+  const handleRemove = async (itemId: string) => {
     const confirmed = window.confirm(`Bạn có chắc chắn muốn xóa ${typeLabel} này khỏi lớp học?`);
     if (!confirmed) return;
 
@@ -96,7 +96,7 @@ export default function LessonsManagePage({ searchParams }: PageProps) {
     }
   };
 
-  const handleDelete = async (itemId: number) => {
+  const handleDelete = async (itemId: string) => {
     const confirmed = window.confirm(
       `CẢNH BÁO: Hành động này sẽ xóa hoàn toàn ${typeLabel} khỏi hệ thống và tất cả các lớp học. Bạn có chắc muốn tiếp tục?`
     );

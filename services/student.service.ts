@@ -13,10 +13,8 @@ export async function getStudentData(classId: string, uid?: string) {
     const decoded = await verifyAuth();
     if (!decoded) return null;
 
-    const classIdNum = parseInt(classId, 10);
-
     const cls = await prisma.class.findUnique({
-      where: { id: classIdNum },
+      where: { id: classId },
       include: {
         students: {
           orderBy: [
@@ -75,7 +73,6 @@ export async function addStudent(studentData: {
     if (!decoded) return null;
 
     const { firstName, lastName, email, password, birthday, gender, classId } = studentData;
-    const classIdNum = parseInt(classId, 10);
     const studentUid = `std_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
 
     const rawPassword = password || "password123";
@@ -97,7 +94,7 @@ export async function addStudent(studentData: {
         lastname: lastName,
         email: email.trim().toLowerCase(),
         passwordHash: passwordHash,
-        classid: classIdNum,
+        classid: classId,
         gender: gender || null,
         dateOfBirth: dobBigInt,
       },

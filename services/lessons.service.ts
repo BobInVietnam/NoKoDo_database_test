@@ -12,16 +12,15 @@ export async function getManageData(classId: string, type: "lesson" | "test") {
     const decoded = await verifyAuth();
     if (!decoded) return null;
 
-    const classIdNum = parseInt(classId, 10);
     const cls = await prisma.class.findUnique({
-      where: { id: classIdNum },
+      where: { id: classId },
     });
 
     if (!cls) return null;
 
     if (type === "lesson") {
       const assignedRelations = await prisma.classLesson.findMany({
-        where: { classid: classIdNum },
+        where: { classid: classId },
         include: { lesson: true },
       });
 
@@ -50,7 +49,7 @@ export async function getManageData(classId: string, type: "lesson" | "test") {
       };
     } else {
       const assignedRelations = await prisma.classTest.findMany({
-        where: { classid: classIdNum },
+        where: { classid: classId },
         include: { test: true },
       });
 
@@ -84,36 +83,34 @@ export async function getManageData(classId: string, type: "lesson" | "test") {
   }
 }
 
-export async function assignToClass(classId: string, itemId: number, type: "lesson" | "test") {
+export async function assignToClass(classId: string, itemId: string, type: "lesson" | "test") {
   try {
     const decoded = await verifyAuth();
     if (!decoded) return { success: false, error: "Chưa đăng nhập" };
 
-    const classIdNum = parseInt(classId, 10);
-
     if (type === "lesson") {
       const exists = await prisma.classLesson.findUnique({
         where: {
-          classid_lessonid: { classid: classIdNum, lessonid: itemId },
+          classid_lessonid: { classid: classId, lessonid: itemId },
         },
       });
 
       if (exists) return { success: true };
 
       await prisma.classLesson.create({
-        data: { classid: classIdNum, lessonid: itemId },
+        data: { classid: classId, lessonid: itemId },
       });
     } else {
       const exists = await prisma.classTest.findUnique({
         where: {
-          testid_classid: { classid: classIdNum, testid: itemId },
+          testid_classid: { classid: classId, testid: itemId },
         },
       });
 
       if (exists) return { success: true };
 
       await prisma.classTest.create({
-        data: { classid: classIdNum, testid: itemId },
+        data: { classid: classId, testid: itemId },
       });
     }
 
@@ -124,23 +121,21 @@ export async function assignToClass(classId: string, itemId: number, type: "less
   }
 }
 
-export async function removeFromClass(classId: string, itemId: number, type: "lesson" | "test") {
+export async function removeFromClass(classId: string, itemId: string, type: "lesson" | "test") {
   try {
     const decoded = await verifyAuth();
     if (!decoded) return { success: false, error: "Chưa đăng nhập" };
 
-    const classIdNum = parseInt(classId, 10);
-
     if (type === "lesson") {
       await prisma.classLesson.delete({
         where: {
-          classid_lessonid: { classid: classIdNum, lessonid: itemId },
+          classid_lessonid: { classid: classId, lessonid: itemId },
         },
       });
     } else {
       await prisma.classTest.delete({
         where: {
-          testid_classid: { classid: classIdNum, testid: itemId },
+          testid_classid: { classid: classId, testid: itemId },
         },
       });
     }
@@ -152,7 +147,7 @@ export async function removeFromClass(classId: string, itemId: number, type: "le
   }
 }
 
-export async function deleteItem(itemId: number, type: "lesson" | "test") {
+export async function deleteItem(itemId: string, type: "lesson" | "test") {
   try {
     const decoded = await verifyAuth();
     if (!decoded) return { success: false, error: "Chưa đăng nhập" };
@@ -193,9 +188,8 @@ export async function getTestForEdit(testId: string) {
       };
     }
 
-    const testIdNum = parseInt(testId, 10);
     const test = await prisma.test.findUnique({
-      where: { id: testIdNum },
+      where: { id: testId },
       include: { questions: { orderBy: { id: 'asc' } } },
     });
 
@@ -231,13 +225,13 @@ export async function getTestForEdit(testId: string) {
 }
 
 export async function saveTest(testData: {
-  id?: number | null;
+  id?: string | null;
   name: string;
   allowedAttempts: number;
   timeLimit: number;
   difficulty: number;
   questions: Array<{
-    id?: number;
+    id?: string;
     question: string;
     answer: string;
     isMultipleChoice: number;
@@ -250,7 +244,7 @@ export async function saveTest(testData: {
 
     const { id, name, allowedAttempts, timeLimit, difficulty, questions } = testData;
 
-    let targetTestId: number;
+    let targetTestId: string;
 
     if (id) {
       targetTestId = id;
@@ -316,9 +310,8 @@ export async function getLessonForEdit(lessonId: string, initialType?: number) {
       };
     }
 
-    const lessonIdNum = parseInt(lessonId, 10);
     const lesson = await prisma.lesson.findUnique({
-      where: { id: lessonIdNum },
+      where: { id: lessonId },
     });
 
     if (!lesson) return null;
@@ -338,7 +331,7 @@ export async function getLessonForEdit(lessonId: string, initialType?: number) {
 }
 
 export async function saveLesson(lessonData: {
-  id?: number | null;
+  id?: string | null;
   name: string;
   type: number;
   description: string;

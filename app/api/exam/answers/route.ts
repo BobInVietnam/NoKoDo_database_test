@@ -28,10 +28,9 @@ export async function POST(request: NextRequest) {
     const { studentId, testId, startTime, answers } = body;
 
     // 1. Base Parameter Parsing and Validation
-    const parsedTestId = parseInt(testId, 10);
     const parsedStarttime = parseInt(startTime, 10);
 
-    if (!studentId || isNaN(parsedTestId) || isNaN(parsedStarttime) || !Array.isArray(answers)) {
+    if (!studentId || !testId || isNaN(parsedStarttime) || !Array.isArray(answers)) {
       return NextResponse.json(
         { error: 'Missing or invalid parameters. Ensure studentId, testId, startTime, and an array of answers are provided.' },
         { status: 400 }
@@ -40,16 +39,14 @@ export async function POST(request: NextRequest) {
 
     // 2. Map the array into the exact shape your StudentAnswer table expects
     const answersData = answers.map((item: any) => {
-      const parsedQuestionId = parseInt(item.questionId, 10);
-    
-      if (isNaN(parsedQuestionId)) {
-        throw new Error(`Invalid answer block found for questionId: ${item.questionId}`);
+      if (!item.questionId) {
+        throw new Error(`Invalid answer block found: questionId is missing`);
       }
       return {
         studentid: studentId,
-        testid: parsedTestId,
+        testid: testId,
         dateCreated: parsedStarttime,
-        questionid: parsedQuestionId,
+        questionid: item.questionId,
         answer: item.answer,
       };
     });

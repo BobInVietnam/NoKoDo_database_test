@@ -261,7 +261,7 @@ export default function EditLessonPage({ params, searchParams }: PageProps) {
         : { cases };
 
     const res = await saveLesson({
-      id: lessonId === "new" ? null : parseInt(lessonId, 10),
+      id: lessonId === "new" ? null : lessonId,
       name,
       type,
       description,
@@ -286,7 +286,7 @@ export default function EditLessonPage({ params, searchParams }: PageProps) {
     const confirmed = window.confirm("Bạn có chắc chắn muốn xóa bài tập này?");
     if (!confirmed) return;
 
-    const res = await deleteItem(parseInt(lessonId, 10), "lesson");
+    const res = await deleteItem(lessonId, "lesson");
     if (res.success) {
       alert("Đã xóa bài tập!");
       router.back();

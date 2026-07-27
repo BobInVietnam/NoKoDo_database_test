@@ -29,19 +29,13 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const studentIdParam = searchParams.get('studentid');
     const params = await context.params;
-    const testId = parseInt(params.id, 10);
+    const testId = params.id;
 
     if (!studentIdParam) {
         return NextResponse.json(
             {   error: 'Student ID must be non-empty for fetching test history'},
             {   status: 400 }
         )
-    }
-    if (isNaN(testId)) {
-      return NextResponse.json(
-        { error: 'Invalid test ID format. It must be an integer.' },
-        { status: 400 }
-      );
     }
 
     // 2. Fetch the test and automatically include its relation-mapped array of questions
@@ -108,11 +102,7 @@ export async function POST(
       return NextResponse.json({ error: 'Không được phép truy cập' }, { status: 401 });
     }
     const params = await context.params;
-    const pathTestId = parseInt(params.id, 10);
-
-    if (isNaN(pathTestId)) {
-      return NextResponse.json({ error: 'Invalid URL test ID segment.' }, { status: 400 });
-    }
+    const pathTestId = params.id;
 
     // 1. Parse the incoming Flutter class payload matching your Dart properties
     const body = await request.json();
@@ -127,7 +117,7 @@ export async function POST(
     }
 
     // Explicitly enforce that the payload target aligns with the dynamic API path segment
-    if (parseInt(testId, 10) !== pathTestId) {
+    if (testId !== pathTestId) {
       return NextResponse.json(
         { error: 'Payload testId does not match the requested API URL endpoint path.' },
         { status: 400 }

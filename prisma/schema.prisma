@@ -13,7 +13,7 @@ datasource db {
 }
 
 model Teacher {
-  uid          String   @id // Primary Key ("uid")
+  uid          String   @id @default(cuid())
   firstname    String
   lastname     String?
   email        String   @unique
@@ -24,12 +24,12 @@ model Teacher {
 }
 
 model Student {
-  uid        String              @id // Primary Key ("uid")
+  uid        String              @id @default(cuid())
   firstname  String
   lastname   String?
   email      String             @unique
   passwordHash String            @map("password_hash")
-  classid    Int                 @default(1)
+  classid    String                @default("1")
   totalTime  Int                 @default(0)  @map("total_time") //seconds
   gender     String?
   dateOfBirth BigInt?            @map("date_of_birth")
@@ -41,7 +41,7 @@ model Student {
 }
 
 model Class {
-  id         Int         @id @default(autoincrement()) // PRIMARY KEY ("id")
+  id         String        @id @default(cuid()) // PRIMARY KEY ("id")
   className  String      @map("class_name")
   teacherid  String
   teacher    Teacher     @relation(fields: [teacherid], references: [uid])
@@ -53,7 +53,7 @@ model Class {
 }
 
 model Lesson {
-  id          Int           @id @default(autoincrement())
+  id          String           @id @default(cuid())
   name        String
   type        Int
   description String
@@ -67,7 +67,7 @@ model Lesson {
 }
 
 model Test {
-  id              Int                 @id @default(autoincrement())
+  id              String                 @id @default(cuid())
   name            String
   dateCreated     BigInt                 @map("date_created")
   timeLimit       Int                 @map("time_limit")
@@ -81,12 +81,12 @@ model Test {
 }
 
 model Question {
-  id               Int             @id @default(autoincrement())
+  id               String           @id @default(cuid())
   question         String
   answer           String
   isMultipleChoice Int             @map("is_multiple_choice")
   choices          Json         
-  testid           Int
+  testid           String
   test             Test            @relation(fields: [testid], references: [id])
   studentAnswers   StudentAnswer[]
 
@@ -95,7 +95,7 @@ model Question {
 
 model StudentLesson {
   studentid    String         
-  lessonid     Int
+  lessonid     String
   results      Json
   student      Student         @relation(fields: [studentid], references: [uid])
   lesson       Lesson          @relation(fields: [lessonid], references: [id])
@@ -106,7 +106,7 @@ model StudentLesson {
 
 model StudentTestStatus {
   studentid    String
-  testid       Int
+  testid       String
   dateCreated  BigInt             @map("date_created")
   dateFinished BigInt             @map("date_finished")
   duration     Int
@@ -122,9 +122,9 @@ model StudentTestStatus {
 
 model StudentAnswer {
   studentid  String          // 2. Added to match the new parent identity
-  testid     Int             // 2. Added to match the new parent identity
+  testid     String            // 2. Added to match the new parent identity
   dateCreated BigInt         @map("date_created")    // 2. Added to match the new parent identity
-  questionid Int
+  questionid String
   answer     String?
   question   Question        @relation(fields: [questionid], references: [id])
   
@@ -138,8 +138,8 @@ model StudentAnswer {
 
 // Many-to-Many Join Tables mapped explicitly from your schema constraints
 model ClassLesson {
-  classid  Int
-  lessonid Int
+  classid  String
+  lessonid String
   class    Class  @relation(fields: [classid], references: [id])
   lesson   Lesson @relation(fields: [lessonid], references: [id])
 
@@ -148,8 +148,8 @@ model ClassLesson {
 }
 
 model ClassTest {
-  classid Int
-  testid  Int
+  classid String
+  testid  String
   class   Class @relation(fields: [classid], references: [id])
   test    Test  @relation(fields: [testid], references: [id])
 
@@ -158,7 +158,7 @@ model ClassTest {
 }
 
 model DictionaryEntry {
-  id        Int     @id @default(autoincrement())
+  id        String     @id @default(cuid())
   word      String
   description String
   imageName String  @map("image_name")

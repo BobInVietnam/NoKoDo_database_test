@@ -54,9 +54,9 @@ async function main() {
 
     // 3. Create a Class linked to that Teacher
     const classes = [
-      {"id": 1, "className": 'Lop 1', "teacherid": teachers[0].uid},
-      {"id": 2, "className": 'Lop 2', "teacherid": teachers[0].uid},
-      {"id": 3, "className": 'Lop trong', "teacherid": teachers[1].uid},
+      {"id": "1", "className": 'Lop 1', "teacherid": teachers[0].uid},
+      {"id": "2", "className": 'Lop 2', "teacherid": teachers[0].uid},
+      {"id": "3", "className": 'Lop trong', "teacherid": teachers[1].uid},
     ]
     for (const cl of classes) {
       await tx.class.create({
@@ -73,7 +73,7 @@ async function main() {
         "lastname": "CaoXuan",
         "email": "hung@nokodo.edu.vn",
         "passwordHash": passwordHash,
-        "classid": 1,
+        "classid": "1",
         "gender": "Nam",
         "dateOfBirth": 100000,
       },
@@ -83,7 +83,7 @@ async function main() {
         "lastname": "Vietnam",
         "email": "bob@nokodo.edu.vn",
         "passwordHash": password2Hash,
-        "classid": 1,
+        "classid": "1",
         "gender": "Nữ",
         "dateOfBirth": 100000,
       },
@@ -93,7 +93,7 @@ async function main() {
         "lastname": "Doe",
         "email": "john@nokodo.edu.vn",
         "passwordHash": passwordHash,
-        "classid": 2,
+        "classid": "2",
         "gender": "Nam",
         "dateOfBirth": 100000,
       }
@@ -108,7 +108,7 @@ async function main() {
     // 5. Create a Mock Lesson with JSONB Data
     const lessons = [
       {
-        "id": 1,
+        "id": "1",
         "name": "Giới thiệu về vần a, ă, â",
         "difficulty": 1,
         "type": 0,
@@ -119,7 +119,7 @@ async function main() {
         }
       },
       {
-        "id": 2,
+        "id": "2",
         "name": "Giới thiệu về vần b, d, p, q",
         "difficulty": 1,
         "type": 0,
@@ -130,7 +130,7 @@ async function main() {
         }
       },
       {
-        "id": 3,
+        "id": "3",
         "name": "Trò chơi tìm chữ a",
         "difficulty": 1,
         "type": 1,
@@ -196,7 +196,7 @@ async function main() {
 
     const testList = [
       {
-        "id": 123,
+        "id": "123",
         "name": "Test 1",
         "dateCreated": 100000,
         "timeLimit": 180,
@@ -204,7 +204,7 @@ async function main() {
         "difficulty": 0
       },
       {
-        "id": 456,
+        "id": "456",
         "name": "Test 2",
         "dateCreated": 101000,
         "timeLimit": 300,
@@ -212,7 +212,7 @@ async function main() {
         "difficulty": 1
       },
       {
-        "id": 789,
+        "id": "789",
         "name": "Bài kiểm tra thử",
         "dateCreated": 1000000,
         "timeLimit": 300,
@@ -228,11 +228,11 @@ async function main() {
     }
 
     const classTestList = [
-      {"classid": 1, "testid": 123},
-      {"classid": 1, "testid": 456},
-      {"classid": 1, "testid": 789},
-      {"classid": 2, "testid": 456},
-      {"classid": 2, "testid": 789}
+      {"classid": "1", "testid": "123"},
+      {"classid": "1", "testid": "456"},
+      {"classid": "1", "testid": "789"},
+      {"classid": "2", "testid": "456"},
+      {"classid": "2", "testid": "789"}
     ]
     for (const ct of classTestList) {
       await tx.classTest.create({
@@ -241,11 +241,11 @@ async function main() {
     }
 
     const classLessonList = [
-      {"classid": 1, "lessonid": 1},
-      {"classid": 1, "lessonid": 2},
-      {"classid": 2, "lessonid": 1},
-      {"classid": 2, "lessonid": 2},
-      {"classid": 2, "lessonid": 3},
+      {"classid": "1", "lessonid": "1"},
+      {"classid": "1", "lessonid": "2"},
+      {"classid": "2", "lessonid": "1"},
+      {"classid": "2", "lessonid": "2"},
+      {"classid": "2", "lessonid": "3"},
     ]
     for (const ct of classLessonList) {
       await tx.classLesson.create({
@@ -255,116 +255,116 @@ async function main() {
 
     const questions = [
       {
-        "id": 1231,
+        "id": "1231",
         "question": "Con vet la con gi?",
         "answer": "Con chim",
         "isMultipleChoice": 1,
         "choices": ["Con trung", "Con chim", "Nam", "C"],
-        "testid": 123
+        "testid": "123"
       },
       {
-        "id": 1232,
+        "id": "1232",
         "question": "Tren troi co con gi?",
         "answer": "Con chim",
         "isMultipleChoice": 1,
         "choices": ["Con chim", "Con bo", "Con ho", "Ca"],
-        "testid": 123
+        "testid": "123"
       },
       {
-        "id": 1233,
+        "id": "1233",
         "question": "Tren troi co con gi?",
         "answer": "Con chim",
         "isMultipleChoice": 1,
         "choices": ["Con chim", "Con cho", "Con meo", "Con"],
-        "testid": 123
+        "testid": "123"
       },
       {
-        "id": 1234,
+        "id": "1234",
         "question": "Mot con vit xoe ra hai cai canh, no",
         "answer": "quac quac quac quac quac quac",
         "isMultipleChoice": 0,
         "choices": "",
-        "testid": 123
+        "testid": "123"
       },
       {
-        "id": 4561,
+        "id": "4561",
         "question": "Mot con vit xoe ra hai cai canh, no",
         "answer": "quac quac quac quac quac quac",
         "isMultipleChoice": 0,
         "choices": "",
-        "testid": 456
+        "testid": "456"
       },
       {
-        "id": 4562,
+        "id": "4562",
         "question": "Placeholder",
         "answer": "3",
         "isMultipleChoice": 1,
         "choices": ["1", "2", "3", "4"],
-        "testid": 456
+        "testid": "456"
       },
       {
-        "id": 7891,
+        "id": "7891",
         "question": "Đây là câu hỏi 1 (đáp án là \"đáp án đúng\")",
         "answer": "đáp án đúng",
         "isMultipleChoice": 0,
         "choices": "",
-        "testid": 789
+        "testid": "789"
       },
       {
-        "id": 7892,
+        "id": "7892",
         "question": "Đây là câu hỏi 2",
         "answer": "đáp án đúng",
         "isMultipleChoice": 1,
         "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "A"],
-        "testid": 789
+        "testid": "789"
       },
       {
-        "id": 7893,
+        "id": "7893",
         "question": "Đây là câu hỏi 3",
         "answer": "đáp án đúng",
         "isMultipleChoice": 1,
         "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "A"],
-        "testid": 789
+        "testid": "789"
       },
       {
-        "id": 7894,
+        "id": "7894",
         "question": "Đây là câu hỏi 4",
         "answer": "đáp án đúng",
         "isMultipleChoice": 0,
         "choices": "",
-        "testid": 789
+        "testid": "789"
       },
       {
-        "id": 7895,
+        "id": "7895",
         "question": "Đây là câu hỏi 5",
         "answer": "đáp án đúng",
         "isMultipleChoice": 1,
         "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "A"],
-        "testid": 789
+        "testid": "789"
       },
       {
-        "id": 7896,
+        "id": "7896",
         "question": "Đây là câu hỏi 6",
         "answer": "đáp án đúng",
         "isMultipleChoice": 1,
         "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "A"],
-        "testid": 789
+        "testid": "789"
       },
       {
-        "id": 7897,
+        "id": "7897",
         "question": "Đây là câu hỏi 7",
         "answer": "đáp án đúng",
         "isMultipleChoice": 0,
         "choices": "",
-        "testid": 789
+        "testid": "789"
       },
       {
-        "id": 7898,
+        "id": "7898",
         "question": "Đây là câu hỏi 8",
         "answer": "đáp án đúng",
         "isMultipleChoice": 1,
         "choices": ["Đáp án 1", "Đáp án 2", "Đáp án đúng", "as"],
-        "testid": 789
+        "testid": "789"
       }
     ]
 
@@ -376,12 +376,12 @@ async function main() {
     console.log(`Created tests for classes`);
 
     const vocabulary = [
-      { word: 'Cây bàng', description: 'Tropical Almond tree.', imageName: 'cây_bàng.jpg' },
-      { word: 'Cây bưởi', description: 'Pomelo tree.', imageName: 'cây_bưởi.jpg' },
-      { word: 'Cây dứa', description: 'Pineapple plant.', imageName: 'cây_dứa.jpg' },
-      { word: 'Con chim', description: 'Generic word for a bird.', imageName: 'con_chim.jpg' },
-      { word: 'Con cún', description: 'Affectionate term for a puppy.', imageName: 'con_cún.jpg' },
-      { word: 'Con trâu', description: 'Water buffalo.', imageName: 'con_trâu.jpg' }
+      { word: 'cây bàng', description: 'Tropical Almond tree.', imageName: 'cây_bàng.jpg' },
+      { word: 'cây bưởi', description: 'Pomelo tree.', imageName: 'cây_bưởi.jpg' },
+      { word: 'cây dứa', description: 'Pineapple plant.', imageName: 'cây_dứa.jpg' },
+      { word: 'con chim', description: 'Generic word for a bird.', imageName: 'con_chim.jpg' },
+      { word: 'con cún', description: 'Affectionate term for a puppy.', imageName: 'con_cún.jpg' },
+      { word: 'con trâu', description: 'Water buffalo.', imageName: 'con_trâu.jpg' }
     ];
 
     for (const item of vocabulary) {

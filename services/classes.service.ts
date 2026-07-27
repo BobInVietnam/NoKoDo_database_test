@@ -43,10 +43,8 @@ export async function deleteClass(classId: string, firebaseUid?: string) {
     const decoded = await verifyAuth();
     if (!decoded) return { success: false, error: "Chưa đăng nhập" };
     const teacherUid = decoded.uid;
-    const classIdNum = parseInt(classId, 10);
-
     const targetClass = await prisma.class.findUnique({
-      where: { id: classIdNum },
+      where: { id: classId },
     });
     if (!targetClass) {
       return { success: false, error: "Không tìm thấy lớp học" };
@@ -78,12 +76,12 @@ export async function deleteClass(classId: string, firebaseUid?: string) {
     const freeClassId = freeClass.id;
 
     await prisma.student.updateMany({
-      where: { classid: classIdNum },
+      where: { classid: classId },
       data: { classid: freeClassId },
     });
 
     await prisma.class.delete({
-      where: { id: classIdNum },
+      where: { id: classId },
     });
 
     return { success: true };

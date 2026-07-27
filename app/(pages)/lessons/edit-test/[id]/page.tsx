@@ -106,7 +106,7 @@ export default function EditTestPage({ params }: PageProps) {
 
     setSaving(true);
     const res = await saveTest({
-      id: testId === "new" ? null : parseInt(testId, 10),
+      id: testId === "new" ? null : testId,
       name,
       allowedAttempts: Number(allowedAttempts),
       timeLimit: Number(timeLimit),
@@ -132,7 +132,7 @@ export default function EditTestPage({ params }: PageProps) {
     const confirmed = window.confirm("Bạn có chắc chắn muốn xóa bài kiểm tra này?");
     if (!confirmed) return;
 
-    const res = await deleteItem(parseInt(testId, 10), "test");
+    const res = await deleteItem(testId, "test");
     if (res.success) {
       alert("Đã xóa bài kiểm tra!");
       router.back();

@@ -36,18 +36,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const classId = parseInt(classIdParam, 10);
-    if (isNaN(classId)) {
-      return NextResponse.json(
-        { error: 'Invalid classid format. It must be an integer.' },
-        { status: 400 }
-      );
-    }
-
     // 2. Query the ClassLesson table, filtering by classid, and include the Lesson data
     const classLessons = await prisma.classLesson.findMany({
       where: {
-        classid: classId,
+        classid: classIdParam,
       },
       include: {
         lesson: true, // Pulls the full matching Lesson object fields
@@ -76,7 +68,7 @@ export async function GET(request: NextRequest) {
     console.log(lessons);
     return NextResponse.json(
       { 
-        classid: classId,
+        classid: classIdParam,
         studentid: studentId,
         count: lessons.length, 
         lessons 
@@ -121,7 +113,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (lessonid === undefined || lessonid === null || typeof lessonid !== 'number') {
+    if (lessonid === undefined || lessonid === null || typeof lessonid !== 'string') {
       return NextResponse.json(
         { error: 'Missing or invalid field: lessonid (number)' },
         { status: 400 }

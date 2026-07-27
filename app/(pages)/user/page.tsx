@@ -3,6 +3,8 @@ import { PrismaClient } from '@/app/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { verifyAuth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { cookies } from "next/headers";
+import LogoutButton from "@/components/LogOutButton"
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -26,6 +28,13 @@ export default async function UserPage() {
     email: teacher.email,
     created_at: new Date().toISOString(),
   };
+
+  async function logOut() {
+    "use server"
+    const cookieStore = await cookies();
+    cookieStore.delete("session");
+    redirect("/");
+  }
 
   return (
     <div className="container">
@@ -62,6 +71,9 @@ export default async function UserPage() {
             <span></span> ✎ Edit Profile
           </button>
         </div>
+      </div>
+      <div>
+        <LogoutButton logOutAction={logOut} />
       </div>
     </div>
   );

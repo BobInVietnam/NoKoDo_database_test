@@ -535,6 +535,19 @@ export default function EditLessonPage({ params, searchParams }: PageProps) {
                     style={blueInputStyle}
                   />
                 </div>
+
+                <div style={inputGroupStyle}>
+                  <label style={paramLabelStyle}>Tỷ lệ nhiễu ({currentCase.chance})</label>
+                  <input
+                    type="range"
+                    min="0.0"
+                    max="1.0"
+                    step="0.05"
+                    value={currentCase.chance ?? 0.35}
+                    onChange={(e) => updateCurrentCaseField("chance", parseFloat(e.target.value))}
+                    style={{ flexGrow: 1 }}
+                  />
+                </div>
               </div>
             </div>
           </div>

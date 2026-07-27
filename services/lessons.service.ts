@@ -158,8 +158,8 @@ export async function deleteItem(itemId: string, type: "lesson" | "test") {
       await prisma.lesson.delete({ where: { id: itemId } });
     } else {
       await prisma.classTest.deleteMany({ where: { testid: itemId } });
-      await prisma.studentTestStatus.deleteMany({ where: { testid: itemId } });
       await prisma.studentAnswer.deleteMany({ where: { testid: itemId } });
+      await prisma.studentTestStatus.deleteMany({ where: { testid: itemId } });
       await prisma.question.deleteMany({ where: { testid: itemId } });
       await prisma.test.delete({ where: { id: itemId } });
     }

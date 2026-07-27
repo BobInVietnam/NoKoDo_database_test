@@ -89,8 +89,15 @@ export async function GET(
         };
       })
     );
+    const versionConfig = await prisma.systemConfig.findUnique({ where: { key: 'dictVersion' } });
+    const dateConfig = await prisma.systemConfig.findUnique({ where: { key: 'dictDateEdited' } });
 
-    return NextResponse.json({ count: entriesWithImages.length, entries: entriesWithImages }, { status: 200 });
+    return NextResponse.json({
+      count: entriesWithImages.length,
+      entries: entriesWithImages,
+      version: versionConfig?.value || 'v1',
+      dateEdited: dateConfig?.value || '27/7/2026'
+    }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: 'Database query failed', details: error.message }, { status: 500 });
   }

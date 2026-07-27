@@ -26,7 +26,7 @@ export async function getStudentData(classId: string, uid?: string) {
     });
 
     if (!cls) {
-      return { className: "Chi tiết lớp học", students: [] };
+      return { className: "Chi tiết lớp học", students: [], exams: [] };
     }
 
     const students = cls.students.map((student) => {
@@ -52,7 +52,55 @@ export async function getStudentData(classId: string, uid?: string) {
       };
     });
 
-    return { className: cls.className, students };
+    const classTests = await prisma.classTest.findMany({
+      where: { classid: classId },
+      include: {
+        test: {
+          include: {
+            studentStatuses: {
+              where: {
+                studentid: { in: cls.students.map(s => s.uid) }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const totalStudentsCount = cls.students.length;
+
+    const exams = classTests.map((ct) => {
+      const test = ct.test;
+      const statuses = test.studentStatuses;
+
+      const highestScoresByStudent: { [studentId: string]: number } = {};
+      for (const status of statuses) {
+        const studentId = status.studentid;
+        const score = status.result;
+        if (highestScoresByStudent[studentId] === undefined || score > highestScoresByStudent[studentId]) {
+          highestScoresByStudent[studentId] = score;
+        }
+      }
+
+      const uniqueStudentScores = Object.values(highestScoresByStudent);
+      let avgScore = 0;
+      if (uniqueStudentScores.length > 0) {
+        const sum = uniqueStudentScores.reduce((acc, curr) => acc + curr, 0);
+        avgScore = Math.round((sum / uniqueStudentScores.length) * 10) / 10;
+      }
+
+      const uniqueFinished = uniqueStudentScores.length;
+
+      return {
+        id: test.id,
+        name: test.name,
+        averageScore: avgScore,
+        finishedCount: uniqueFinished,
+        totalCount: totalStudentsCount
+      };
+    });
+
+    return { className: cls.className, students, exams };
   } catch (error) {
     console.error("Fetch student data error:", error);
     return null;
@@ -123,5 +171,109 @@ export async function deleteStudent(studentId: string) {
   } catch (error) {
     console.error("Delete student error:", error);
     return { success: false };
+  }
+}
+
+export async function getClassTestDetail(classId: string, testId: string) {
+  try {
+    const decoded = await verifyAuth();
+    if (!decoded) return null;
+
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
+      include: { students: true }
+    });
+
+    if (!cls) return null;
+
+    const test = await prisma.test.findUnique({
+      where: { id: testId }
+    });
+    if (!test) return null;
+
+    const students = await Promise.all(
+      cls.students.map(async (student) => {
+        const statuses = await prisma.studentTestStatus.findMany({
+          where: {
+            studentid: student.uid,
+            testid: testId
+          },
+          orderBy: { dateFinished: 'desc' }
+        });
+
+        let maxScore = "Chưa làm";
+        let maxScoreValue = -1;
+        let attemptsCount = 0;
+        let latestDate = "N/A";
+        let latestTimestamp = 0;
+
+        if (statuses.length > 0) {
+          const scores = statuses.map(s => s.result);
+          maxScoreValue = Math.max(...scores);
+          maxScore = `${maxScoreValue} điểm`;
+          attemptsCount = statuses.length;
+          
+          const maxDateBigInt = statuses[0].dateFinished;
+          latestTimestamp = Number(maxDateBigInt);
+          const date = new Date(latestTimestamp);
+          latestDate = date.toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+          });
+        }
+
+        return {
+          studentName: `${student.lastname || ''} ${student.firstname}`.trim(),
+          maxScore,
+          maxScoreValue,
+          attemptsCount,
+          latestDate,
+          latestTimestamp
+        };
+      })
+    );
+
+    return {
+      testName: test.name,
+      students
+    };
+  } catch (error) {
+    console.error("getClassTestDetail error:", error);
+    return null;
+  }
+}
+
+export async function clearClassTestResults(classId: string, testId: string) {
+  try {
+    const decoded = await verifyAuth();
+    if (!decoded) return { success: false, error: "Chưa đăng nhập" };
+
+    const cls = await prisma.class.findUnique({
+      where: { id: classId },
+      include: { students: true }
+    });
+    if (!cls) return { success: false, error: "Không tìm thấy lớp học" };
+
+    const studentIds = cls.students.map(s => s.uid);
+
+    await prisma.studentAnswer.deleteMany({
+      where: {
+        testid: testId,
+        studentid: { in: studentIds }
+      }
+    });
+
+    await prisma.studentTestStatus.deleteMany({
+      where: {
+        testid: testId,
+        studentid: { in: studentIds }
+      }
+    });
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("clearClassTestResults error:", error);
+    return { success: false, error: error.message };
   }
 }

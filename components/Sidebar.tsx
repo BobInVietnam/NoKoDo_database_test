@@ -1,5 +1,5 @@
 "use client";
-import { BookUser, UserRound, School, LayoutDashboard } from "lucide-react";
+import { BookUser, UserRound, School, LayoutDashboard, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "../app/(pages)/pages.css";
@@ -26,6 +26,11 @@ export default function Sidebar() {
       href: "/lessons",
       tooltip: "Quản lý bài học",
       icon: BookUser,
+    },
+    {
+      href: "/dictionary",
+      tooltip: "Từ điển của học sinh",
+      icon: BookOpen,
     },
   ];
   return (

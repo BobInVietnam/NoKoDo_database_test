@@ -402,7 +402,7 @@ export default function EditLessonPage({ params, searchParams }: PageProps) {
         <div style={{ marginTop: "25px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
             <h2 style={{ fontSize: "18px", fontWeight: "bold", margin: 0 }}>Nội dung bài luyện tập</h2>
-            <button onClick={() => setShowOcrModal(true)} className="btn-action" style={{ padding: "8px 24px" }}>
+            <button onClick={() => {console.log("Not implemented")}} className="btn-action" style={{ padding: "8px 24px" }}>
               OCR
             </button>
           </div>

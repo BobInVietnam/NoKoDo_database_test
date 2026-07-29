@@ -149,7 +149,9 @@ export default async function ClassDetailPage({
                       color: "#000",
                     }}
                   >
-                    {student.studentName}
+                    <Link href={`/student/${student.studentId}`} style={{ color: "#2b78c5", textDecoration: "underline" }}>
+                      {student.studentName}
+                    </Link>
                   </td>
                   <td
                     style={{

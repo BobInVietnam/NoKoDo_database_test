@@ -221,8 +221,8 @@ export default function DictionaryPage() {
                         style={tableInputStyle}
                       />
                     </td>
-                    <td style={{ ...tdStyle, textAlign: "right", width: "320px" }}>
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "10px" }}>
+                    <td style={{ ...tdStyle, textAlign: "left", width: "320px" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "10px" }}>
                         <label style={{
                           display: "inline-flex",
                           alignItems: "center",

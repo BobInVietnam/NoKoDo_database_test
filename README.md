@@ -2,7 +2,44 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+This is for people who don't want to use LLM features on Ollama for easier testing. Keep in mind that this will disable LLM features in the mobile app.
+
+## Running the Database
+
+If it's the first time running the database, refer to the instructions in https://www.prisma.io/docs/prisma-orm/quickstart/prisma-postgres for more details. For now, follow the instructions below.
+
+Run the Postgres database on Docker
+```bash
+docker compose up -d
+```
+
+Install the required dependency
+```bash
+npm init
+npm install typescript tsx @types/node --save-dev
+npm install prisma @types/pg --save-dev
+npm install @prisma/client @prisma/adapter-pg pg dotenv
+```
+
+Then, to prepare the database:
+
+```bash
+npx prisma migrate reset
+npx prisma migrate dev --name init
+npx prisma generate
+```
+To populate the database
+
+```bash
+npx prisma db seed
+```
+
+To check the database with a web interface
+```bash
+npx prisma studio
+```
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -19,47 +56,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Installing Ollama (gemma4:31b-cloud)
-
-To use the online model (for testing purpose), you must install Ollama, create an account on ollama.com and sign in.
-
-In the terminal, run 
-
-```bash
-ollama signin
-```
-
-Then
-
-```bash
-ollama pull gemma4:31b-cloud
-```
-
-## Running the Database
-
-
-If it's the first time running the database. Follow the instruction in https://www.prisma.io/docs/prisma-orm/quickstart/prisma-postgres to install the required dependencies, and run the following
-
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
-```
-To populate the database
-
-```bash
-npx prisma db seed
-```
-
-To check the database with a web interface
-```bash
-npx prisma studio
-```
-
-To run the database
-```bash
-docker compose up -d
-```
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

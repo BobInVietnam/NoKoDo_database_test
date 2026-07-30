@@ -2,24 +2,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
 ## Installing Ollama (gemma4:31b-cloud)
 
 To use the online model (for testing purpose), you must install Ollama, create an account on ollama.com and sign in.
@@ -38,10 +20,25 @@ ollama pull gemma4:31b-cloud
 
 ## Running the Database
 
+If it's the first time running the database, refer to the instructions in https://www.prisma.io/docs/prisma-orm/quickstart/prisma-postgres for more details. For now, follow the instructions below.
 
-If it's the first time running the database. Follow the instruction in https://www.prisma.io/docs/prisma-orm/quickstart/prisma-postgres to install the required dependencies, and run the following
+Run the Postgres database on Docker
+```bash
+docker compose up -d
+```
+
+Install the required dependency
+```bash
+npm init
+npm install typescript tsx @types/node --save-dev
+npm install prisma @types/pg --save-dev
+npm install @prisma/client @prisma/adapter-pg pg dotenv
+```
+
+Then, to prepare the database:
 
 ```bash
+npx prisma migrate reset
 npx prisma migrate dev --name init
 npx prisma generate
 ```
@@ -56,10 +53,23 @@ To check the database with a web interface
 npx prisma studio
 ```
 
-To run the database
+Run the development server:
+
 ```bash
-docker compose up -d
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

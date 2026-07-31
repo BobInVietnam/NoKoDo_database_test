@@ -43,6 +43,12 @@ export default function EditLessonPage({ params, searchParams }: PageProps) {
   const [ocrResultText, setOcrResultText] = useState("");
   const [isLoadingOcr, setIsLoadingOcr] = useState(false);
 
+  // Simplify Modal States
+  const [showSimplifyModal, setShowSimplifyModal] = useState(false);
+  const [simplifyInputText, setSimplifyInputText] = useState("");
+  const [simplifyResultText, setSimplifyResultText] = useState("");
+  const [isLoadingSimplify, setIsLoadingSimplify] = useState(false);
+
   useEffect(() => {
     const loadLesson = async () => {
       setLoading(true);
@@ -327,6 +333,38 @@ export default function EditLessonPage({ params, searchParams }: PageProps) {
     }
   };
 
+  const openSimplifyModal = () => {
+    setSimplifyInputText(readingText);
+    setSimplifyResultText("");
+    setShowSimplifyModal(true);
+  };
+
+  const handleSimplifySubmit = async () => {
+    if (!simplifyInputText.trim()) return;
+    setIsLoadingSimplify(true);
+    setSimplifyResultText("");
+    try {
+      const res = await fetch("/api/simplify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: simplifyInputText }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Không thể đơn giản hóa câu từ");
+      } else {
+        setSimplifyResultText(data.simplifiedText || "");
+      }
+    } catch (err) {
+      console.error("Simplify Request Error:", err);
+      alert("Đã xảy ra lỗi kết nối với máy chủ đơn giản hóa.");
+    } finally {
+      setIsLoadingSimplify(false);
+    }
+  };
+
   return (
     <div className="container" style={{ color: "#171717", paddingBottom: "40px" }}>
       <Sidebar />
@@ -402,9 +440,14 @@ export default function EditLessonPage({ params, searchParams }: PageProps) {
         <div style={{ marginTop: "25px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
             <h2 style={{ fontSize: "18px", fontWeight: "bold", margin: 0 }}>Nội dung bài luyện tập</h2>
-            <button onClick={() => setShowOcrModal(true)} className="btn-action" style={{ padding: "8px 24px" }}>
-              OCR
-            </button>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button onClick={() => setShowOcrModal(true)} className="btn-action" style={{ padding: "8px 24px" }}>
+                OCR
+              </button>
+              <button onClick={openSimplifyModal} className="btn-action" style={{ padding: "8px 24px" }}>
+                Đơn giản hóa câu từ
+              </button>
+            </div>
           </div>
 
           <textarea
@@ -644,6 +687,82 @@ export default function EditLessonPage({ params, searchParams }: PageProps) {
                       style={{ flex: 1, backgroundColor: "#16a34a", color: "white", border: "none" }}
                     >
                       Dùng văn bản
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Simplify Text Dialog Popup Modal */}
+      {showSimplifyModal && (
+        <div style={modalOverlayStyle}>
+          <div style={{ ...modalContentStyle, width: "600px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px", borderBottom: "1px solid #eee", paddingBottom: "10px" }}>
+              <h3 style={{ margin: 0, fontSize: "18px" }}>Đơn giản hóa câu từ</h3>
+              <button onClick={() => setShowSimplifyModal(false)} style={{ border: "none", background: "none", cursor: "pointer" }}>
+                <X size={20} />
+              </button>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                <label style={{ fontWeight: "bold", fontSize: "14px" }}>Văn bản gốc:</label>
+                <textarea
+                  rows={6}
+                  value={simplifyInputText}
+                  onChange={(e) => setSimplifyInputText(e.target.value)}
+                  placeholder="Nhập đoạn văn bản gốc cần đơn giản hóa..."
+                  style={blueTextareaStyle}
+                />
+              </div>
+
+              <button
+                onClick={handleSimplifySubmit}
+                disabled={!simplifyInputText.trim() || isLoadingSimplify}
+                className="btn-action"
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  backgroundColor: !simplifyInputText.trim() || isLoadingSimplify ? "#ccc" : "#2b78c5",
+                  color: "white",
+                  cursor: !simplifyInputText.trim() || isLoadingSimplify ? "not-allowed" : "pointer",
+                }}
+              >
+                {isLoadingSimplify ? "Đang xử lý đơn giản hóa..." : "Bắt đầu đơn giản hóa"}
+              </button>
+
+              {simplifyResultText && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px", borderTop: "1px solid #eee", paddingTop: "15px" }}>
+                  <label style={{ fontWeight: "bold", fontSize: "14px" }}>Văn bản đã đơn giản hóa:</label>
+                  <textarea
+                    rows={6}
+                    value={simplifyResultText}
+                    onChange={(e) => setSimplifyResultText(e.target.value)}
+                    style={blueTextareaStyle}
+                  />
+
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(simplifyResultText);
+                        alert("Đã sao chép vào bộ nhớ tạm!");
+                      }}
+                      className="btn-action"
+                      style={{ flex: 1 }}
+                    >
+                      Sao chép
+                    </button>
+                    <button
+                      onClick={() => {
+                        setReadingText(simplifyResultText);
+                        setShowSimplifyModal(false);
+                      }}
+                      className="btn-action"
+                      style={{ flex: 1, backgroundColor: "#16a34a", color: "white", border: "none" }}
+                    >
+                      Áp dụng vào bài học
                     </button>
                   </div>
                 </div>

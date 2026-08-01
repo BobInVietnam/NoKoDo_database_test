@@ -63,7 +63,7 @@ export async function GET(
     let averageTestScore = 0;
     if (highestScores.length > 0) {
       const sum = highestScores.reduce((acc, curr) => acc + (curr._max.result ?? 0), 0);
-      averageTestScore = Math.round(sum / highestScores.length);
+      averageTestScore = Math.round(sum / highestScores.length * 100) / 100;
     }
 
     // 5. Fetch class lesson count

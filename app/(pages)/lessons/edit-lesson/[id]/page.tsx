@@ -580,7 +580,7 @@ export default function EditLessonPage({ params, searchParams }: PageProps) {
                 </div>
 
                 <div style={inputGroupStyle}>
-                  <label style={paramLabelStyle}>Tỷ lệ nhiễu ({currentCase.chance})</label>
+                  <label style={paramLabelStyle}>Tỷ lệ xuất hiện chữ ({currentCase.chance})</label>
                   <input
                     type="range"
                     min="0.0"
